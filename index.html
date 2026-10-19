@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ascent Tracker</title>
+  <meta name="description" content="Live tracker for a 17-ascent, 29,029 ft endurance event.">
+  <meta name="theme-color" content="#101010">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ascents">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="topbar">
+    <span id="topbar-clock">—</span>
+    <span class="topbar-sep">·</span>
+    <span id="topbar-event">—</span>
+  </div>
+
+  <header class="site-header">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M32 6 L60 56 H4 Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M32 24 L46 48 H18 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <h1 class="brand-title">Ascent Tracker</h1>
+        <p class="brand-sub">17 ascents · 1.4 mi · 1,750 ft each · 29,029 ft</p>
+      </div>
+    </div>
+    <button class="icon-btn" id="btn-settings" type="button" aria-label="Settings">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.7 7.7 0 0 0-1.7-1L15 3H9l-.4 2.7a7.7 7.7 0 0 0-1.7 1l-2.5-1-2 3.5L4.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.7 7.7 0 0 0 1.7 1L9 21h6l.4-2.7a7.7 7.7 0 0 0 1.7-1l2.5 1 2-3.5zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/></svg>
+    </button>
+  </header>
+
+  <main class="container">
+
+    <!-- LIVE STATUS -->
+    <section class="hero" id="hero">
+      <p class="eyebrow" id="hero-eyebrow">Ready</p>
+      <h2 class="hero-title" id="hero-title">Ascent 1</h2>
+      <div class="hero-timer" id="hero-timer">0:00:00</div>
+      <p class="hero-note" id="hero-note">Tap the button when you start climbing.</p>
+      <button class="btn btn-primary btn-big" id="btn-record" type="button">Start Ascent 1</button>
+      <div class="hero-actions">
+        <button class="btn btn-ghost btn-small" id="btn-undo" type="button">Undo last tap</button>
+        <button class="btn btn-ghost btn-small" id="btn-manual" type="button">Enter time manually</button>
+      </div>
+    </section>
+
+    <!-- GOAL SELECTOR -->
+    <section class="panel">
+      <div class="panel-head">
+        <h3 class="panel-title">Goal Scenario</h3>
+        <span class="goal-status" id="goal-status">—</span>
+      </div>
+      <div class="segmented" id="goal-switch" role="tablist" aria-label="Goal scenario">
+        <button type="button" role="tab" data-goal="redhat">Red Hat</button>
+        <button type="button" role="tab" data-goal="main">Main</button>
+        <button type="button" role="tab" data-goal="stretch">Stretch</button>
+      </div>
+      <p class="goal-desc" id="goal-desc"></p>
+    </section>
+
+    <!-- TOTALS -->
+    <section class="panel">
+      <div class="panel-head">
+        <h3 class="panel-title">Totals</h3>
+      </div>
+      <div class="stats" id="stats">
+        <div class="stat"><span class="stat-label">Ascents done</span><span class="stat-value" id="st-done">0 / 17</span></div>
+        <div class="stat"><span class="stat-label">Ascent time</span><span class="stat-value" id="st-ascent">0m</span></div>
+        <div class="stat"><span class="stat-label">Break time</span><span class="stat-value" id="st-break">0m</span></div>
+        <div class="stat"><span class="stat-label">Avg ascent</span><span class="stat-value" id="st-avg">—</span></div>
+        <div class="stat"><span class="stat-label">Miles</span><span class="stat-value" id="st-miles">0.0</span></div>
+        <div class="stat"><span class="stat-label">Elevation</span><span class="stat-value" id="st-elev">0 ft</span></div>
+        <div class="stat stat-wide"><span class="stat-label">Projected finish</span><span class="stat-value" id="st-proj">—</span><span class="stat-sub" id="st-proj-sub"></span></div>
+        <div class="stat stat-wide"><span class="stat-label" id="st-goal-label">Goal finish</span><span class="stat-value" id="st-goal">—</span><span class="stat-sub" id="st-goal-sub"></span></div>
+      </div>
+    </section>
+
+    <!-- ASCENT LOG -->
+    <section class="panel">
+      <div class="panel-head">
+        <h3 class="panel-title">Ascent Log</h3>
+        <span class="legend"><i class="legend-plan">6:00 AM</i> = goal plan · tap a row to edit</span>
+      </div>
+      <div class="table-wrap">
+        <table class="log" id="log">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Ascent</th>
+              <th>Break</th>
+              <th>Goal</th>
+              <th>±</th>
+            </tr>
+          </thead>
+          <tbody id="log-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SUMMITS -->
+    <section class="panel">
+      <div class="panel-head">
+        <h3 class="panel-title">Seven Summits</h3>
+      </div>
+      <ul class="summits" id="summits"></ul>
+    </section>
+
+    <footer class="foot">
+      <p>Times are saved on this device. Use Settings to export a backup.</p>
+    </footer>
+  </main>
+
+  <!-- EDIT MODAL -->
+  <div class="modal" id="modal-edit" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="edit-title">
+      <p class="eyebrow">Edit times</p>
+      <h2 class="modal-title" id="edit-title">Ascent 1</h2>
+      <form id="edit-form">
+        <label class="field">
+          <span>Start</span>
+          <div class="field-row">
+            <input type="datetime-local" step="1" id="edit-start">
+            <button type="button" class="btn btn-ghost btn-small" data-now="edit-start">Now</button>
+            <button type="button" class="btn btn-ghost btn-small" data-clear="edit-start">Clear</button>
+          </div>
+        </label>
+        <label class="field">
+          <span>End</span>
+          <div class="field-row">
+            <input type="datetime-local" step="1" id="edit-end">
+            <button type="button" class="btn btn-ghost btn-small" data-now="edit-end">Now</button>
+            <button type="button" class="btn btn-ghost btn-small" data-clear="edit-end">Clear</button>
+          </div>
+        </label>
+        <p class="form-error" id="edit-error" hidden></p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="edit-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MILESTONE MODAL -->
+  <div class="modal" id="modal-summit" hidden>
+    <div class="modal-card modal-summit" role="dialog" aria-modal="true" aria-labelledby="summit-msg">
+      <svg class="summit-icon" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M32 6 L60 56 H4 Z" fill="currentColor"/>
+        <path d="M32 6 L39 18 L36 16 L32 20 L28 16 L25 18 Z" fill="#101010"/>
+      </svg>
+      <p class="eyebrow" id="summit-eyebrow">Summit reached</p>
+      <h2 class="modal-title summit-msg" id="summit-msg">Congrats!</h2>
+      <p class="summit-sub" id="summit-sub"></p>
+      <button type="button" class="btn btn-primary" id="summit-ok">Keep climbing</button>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div class="modal" id="modal-settings" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <p class="eyebrow">Settings</p>
+      <h2 class="modal-title" id="settings-title">Event</h2>
+      <label class="field">
+        <span>Event start (goal schedules count from here)</span>
+        <div class="field-row">
+          <input type="datetime-local" step="60" id="set-start">
+        </div>
+      </label>
+      <p class="hint" id="set-cutoff"></p>
+      <div class="settings-group">
+        <button type="button" class="btn btn-ghost" id="btn-export">Export backup</button>
+        <label class="btn btn-ghost" for="file-import">Import backup</label>
+        <input type="file" id="file-import" accept="application/json" hidden>
+      </div>
+      <div class="settings-group">
+        <button type="button" class="btn btn-danger" id="btn-reset">Reset all times</button>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="settings-cancel">Cancel</button>
+        <button type="button" class="btn btn-primary" id="settings-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
