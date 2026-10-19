@@ -16,7 +16,10 @@ Then open http://localhost:8765 in a browser.
 Service workers (offline support and "Add to Home Screen") only work over HTTPS
 or on localhost, so to use it on the mountain the folder has to be hosted
 somewhere with HTTPS. Any static host works — GitHub Pages, Netlify Drop, Cloudflare
-Pages, Vercel — just upload this folder as-is. Then:
+Pages, Vercel — just upload this folder as-is.
+
+This app is hosted on GitHub Pages at **https://angelaharalson.github.io/ascent-tracker/**
+(source: https://github.com/angelaharalson/ascent-tracker). Open that URL on your phone, then:
 
 - **iPhone (Safari):** open the URL, tap Share, then "Add to Home Screen".
 - **Android (Chrome):** open the URL, tap the menu, then "Install app" / "Add to Home screen".
